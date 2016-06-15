@@ -18,6 +18,16 @@ Tower::~Tower()
   }
 }
 
+
+unsigned int Tower::Distance(const Tower& t1, const Tower& t2)
+{
+  if (t1.x > t2.x)
+  {
+    return t1.x - t2.x;
+  }
+  return t2.x - t1.x;
+}
+
 std::ostream& operator<<(std::ostream& os, const Tower& t)
 {
   os << "x=" << t.x << ", est=" << t.est;

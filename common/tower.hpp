@@ -27,6 +27,8 @@ public:
   friend Shooter::~Shooter();
   
   inline Shooter* shooter() const { return _shooter; }
+  
+  static unsigned int Distance(const Tower& t1, const Tower& t2);
 
 private:
   Shooter* _shooter;

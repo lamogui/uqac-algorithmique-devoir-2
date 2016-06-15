@@ -12,6 +12,7 @@ Defini une armée de tireurs
 
 class Shooter;
 class Street;
+class Tower;
 
 
 class Army
@@ -19,13 +20,21 @@ class Army
 public:
   Army();
   virtual ~Army();
+  typedef std::set<Tower*> Solution;
 
   void reset();
   void create(unsigned int count);
 
   void affectNaive(Street& street);
+  void affectDist(Street& street, unsigned int dist);
+  void affectSolution(const Solution& solution);
+
 
   std::set<Shooter*> shooters;
+  
+  unsigned int ComputeSolutionValue(Solution& solution);
+
+  static bool CanAddToSolutionDist(Solution& solution, const Tower& t, unsigned int dist);
 
 };
 
