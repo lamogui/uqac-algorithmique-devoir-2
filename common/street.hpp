@@ -8,13 +8,27 @@ Defini une liste de tours ordonée
 */
 
 #include <map>
+#include <istream>
+#include <ostream>
+
 class Tower;
 
 class Street
 {
 public:
-  std::map<unsigned int, Tower*> towers;
+  Street();
+  virtual ~Street();
+
+  void reset();
+  bool loadFromStream(std::istream& stream);
+
+  typedef std::map<unsigned int, Tower*> TowerMap;
+
+  TowerMap towers;
+  std::string name;
 
 };
+
+std::ostream& operator<<(std::ostream& os, const Street& s);
 
 #endif

@@ -78,12 +78,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\common\army.cpp" />
     <ClCompile Include="..\common\shooter.cpp" />
     <ClCompile Include="..\common\street.cpp" />
     <ClCompile Include="..\common\tower.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\common\army.hpp" />
     <ClInclude Include="..\common\shooter.hpp" />
     <ClInclude Include="..\common\street.hpp" />
     <ClInclude Include="..\common\tower.hpp" />
