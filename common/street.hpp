@@ -22,10 +22,14 @@ public:
   void reset();
   bool loadFromStream(std::istream& stream);
 
+  Tower* peekRandomTower() const ;
+
   typedef std::map<unsigned int, Tower*> TowerMap;
 
   TowerMap towers;
   std::string name;
+
+
 
 
 };

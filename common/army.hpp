@@ -26,8 +26,11 @@ public:
   void create(unsigned int count);
 
   void affectNaive(Street& street);
-  void affectDist(Street& street, unsigned int dist);
+  void affectDist(Street& street, unsigned int dist, unsigned int iterations = 1000);
   void affectSolution(const Solution& solution);
+
+
+  static Tower* RemoveRandomTower(Solution& s);
 
 
   std::set<Shooter*> shooters;

@@ -5,6 +5,9 @@
 #include "street.hpp"
 #include "tower.hpp"
 
+
+#include <cassert>
+#include <cstdlib>
 #include <queue>
 #include <iostream>
 
@@ -55,7 +58,7 @@ void Army::affectNaive(Street& street)
   }
 }
 
-void Army::affectDist(Street& street, unsigned int dist)
+void Army::affectDist(Street& street, unsigned int dist, unsigned int iterations)
 {
   auto compare_func = [](Tower* t1, Tower* t2) { return t1->est < t2->est; };
   std::priority_queue<Tower*, std::vector<Tower*>, decltype(compare_func)> queue;
@@ -65,8 +68,8 @@ void Army::affectDist(Street& street, unsigned int dist)
     queue.push(it->second);
   }
 
+  //Calcul instinctif d'une bonne solution
   Solution B;
-
   std::set<Shooter*>::iterator is;
   for (is = shooters.begin(); is != shooters.end(); ++is)
   {
@@ -85,8 +88,63 @@ void Army::affectDist(Street& street, unsigned int dist)
     B.insert(t);
   }
 
-  affectSolution(B);
+  unsigned int E = ComputeSolutionValue(B);
+  std::cout << "Instinctive initial solution: " << E << std::endl;
 
+  unsigned int k = 0;
+
+  unsigned int max_est_delta = 10;
+
+  unsigned int count_best_solution = 0;
+
+  //Pseudo recuit simulé
+  Solution last_good_solution = B;
+  for (k = 0; k < iterations; ++k)
+  {
+    Solution current_solution = last_good_solution; //On part de la derniere bonne solution
+
+    //On va regarder le voisinage des solutions 
+    Tower* r = RemoveRandomTower(current_solution); //Pour cela on retire une tour au hasard
+    Tower* t = street.peekRandomTower(); //et on la remplace par une autre au hasard également
+    
+    unsigned int infinite_loop = 0;
+    while (!CanAddToSolutionDist(current_solution, *t, dist) || t==r ) //On verifie que la nouvelle solution est valide
+    {
+      t = street.peekRandomTower();
+      ++infinite_loop;
+      if (infinite_loop > street.towers.size())
+      {
+        break;
+      }
+    }
+    if (infinite_loop > street.towers.size())
+    {
+      std::cerr << "No valid solution in neighbourhood after " << infinite_loop << " iterations return instinctive solution" << std::endl;
+      break;
+    }
+
+    current_solution.insert(t);
+    
+    unsigned int e = ComputeSolutionValue(current_solution);
+    if (e >= E) //>= to prevent division by 0
+    {
+      //Une meilleure solution a été trouvé 
+      B = current_solution;
+      last_good_solution.swap(current_solution);
+      ++count_best_solution;
+      E = e;
+      std::cout << "Better solution found in neighbourhood of initial solution: " << E << std::endl;
+    }
+    else if ( (rand() % (E-e)) < max_est_delta ) //Pseudo Recuit simulé ici en gros plus je m'eloigne d'une très bonne solution moins j'ai de chances de la selectionner
+    {
+      last_good_solution.swap(current_solution);
+    }
+  }
+
+  std::cout << "Found " << count_best_solution << " better solution in neighbourhood of initial solution " << std::endl;
+  std::cout << "Best solution found: " << E << std::endl;
+
+  affectSolution(B);
 }
 
 
@@ -124,4 +182,16 @@ unsigned int Army::ComputeSolutionValue(Solution& solution)
     value += (*it)->est;
   }
   return value;
+}
+
+
+Tower* Army::RemoveRandomTower(Solution& s)
+{
+  assert(s.size());
+  
+  Solution::iterator it = s.begin();
+  std::advance(it, rand() % s.size());
+  Tower* t = *it;
+  s.erase(it);
+  return t;
 }

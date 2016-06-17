@@ -7,11 +7,14 @@ Julien De Loor (julien.de-loor1@uqac.ca)
 #include "../common/army.hpp"
 #include <fstream>
 #include <iostream>
+#include <ctime>
 
 #define WAITEND getchar()
 
 int main(int argc, char** argv)
 {
+  srand(time(NULL));
+
   if (argc != 3)
   {
     std::cout << "usage: " << argv[0] << " <file.txt> <dist>" << std::endl;

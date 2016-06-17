@@ -4,7 +4,8 @@
 #include "tower.hpp"
 
 #include <iostream>
-
+#include <cassert>
+#include <cstdlib>
 
 Street::Street():
   name("Renascence Street")
@@ -87,4 +88,13 @@ std::ostream& operator<<(std::ostream& os, const Street& s)
     }
   }
   return os;
+}
+
+Tower* Street::peekRandomTower() const
+{
+  assert(!towers.empty());
+
+  TowerMap::const_iterator it = towers.cbegin();
+  std::advance(it, rand() % towers.size());
+  return it->second;
 }
