@@ -1,5 +1,5 @@
 /*
-Devoir 2 Question 2
+Devoir 2 Question 3
 Julien De Loor (julien.de-loor1@uqac.ca)
 */
 
@@ -13,8 +13,8 @@ Julien De Loor (julien.de-loor1@uqac.ca)
 
 int main(int argc, char** argv)
 {
+  std::cout << "Algo TP2 Question 3 Julien De Loor: julien.de-loor1@uqac.ca" << std::endl;
   srand((unsigned int)time(NULL));
-  std::cout << "Algo TP2 Question 2 Julien De Loor: julien.de-loor1@uqac.ca" << std::endl;
 
   if (argc != 3)
   {

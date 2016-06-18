@@ -50,15 +50,20 @@ void Army::affectNaive(Street& street)
     queue.push(it->second);
   }
 
+  Solution B;
   std::set<Shooter*>::iterator is;
   for (is = shooters.begin(); is != shooters.end(); ++is)
   {
-    (*is)->moveToTower(queue.top());
+    //(*is)->moveToTower(queue.top());
+    B.insert(queue.top());
     queue.pop();
   }
+  std::cout << "Value of solution found: " << Army::ComputeSolutionValue(B) << std::endl;
+  affectSolution(B);
+
 }
 
-void Army::affectDist(Street& street, unsigned int dist, unsigned int iterations)
+void Army::affectNaiveDist(Street& street, unsigned int dist, unsigned int iterations)
 {
   auto compare_func = [](Tower* t1, Tower* t2) { return t1->est < t2->est; };
   std::priority_queue<Tower*, std::vector<Tower*>, decltype(compare_func)> queue;
@@ -87,63 +92,8 @@ void Army::affectDist(Street& street, unsigned int dist, unsigned int iterations
     
     B.insert(t);
   }
-
-  unsigned int E = ComputeSolutionValue(B);
-  std::cout << "Instinctive initial solution: " << E << std::endl;
-
-  unsigned int k = 0;
-
-  unsigned int max_est_delta = 10;
-
-  unsigned int count_best_solution = 0;
-
-  //Pseudo recuit simulé
-  Solution last_good_solution = B;
-  for (k = 0; k < iterations; ++k)
-  {
-    Solution current_solution = last_good_solution; //On part de la derniere bonne solution
-
-    //On va regarder le voisinage des solutions 
-    Tower* r = RemoveRandomTower(current_solution); //Pour cela on retire une tour au hasard
-    Tower* t = street.peekRandomTower(); //et on la remplace par une autre au hasard également
-    
-    unsigned int infinite_loop = 0;
-    while (!CanAddToSolutionDist(current_solution, *t, dist) || t==r ) //On verifie que la nouvelle solution est valide
-    {
-      t = street.peekRandomTower();
-      ++infinite_loop;
-      if (infinite_loop > street.towers.size())
-      {
-        break;
-      }
-    }
-    if (infinite_loop > street.towers.size())
-    {
-      std::cerr << "No valid solution in neighbourhood after " << infinite_loop << " iterations return instinctive solution" << std::endl;
-      break;
-    }
-
-    current_solution.insert(t);
-    
-    unsigned int e = ComputeSolutionValue(current_solution);
-    if (e >= E) //>= to prevent division by 0
-    {
-      //Une meilleure solution a été trouvé 
-      B = current_solution;
-      last_good_solution.swap(current_solution);
-      ++count_best_solution;
-      E = e;
-      std::cout << "Better solution found in neighbourhood of initial solution: " << E << std::endl;
-    }
-    else if ( (rand() % (E-e)) < max_est_delta ) //Pseudo Recuit simulé ici en gros plus je m'eloigne d'une très bonne solution moins j'ai de chances de la selectionner
-    {
-      last_good_solution.swap(current_solution);
-    }
-  }
-
-  std::cout << "Found " << count_best_solution << " better solution in neighbourhood of initial solution " << std::endl;
-  std::cout << "Best solution found: " << E << std::endl;
-
+  
+  std::cout << "Value of solution found: " << Army::ComputeSolutionValue(B) << std::endl;
   affectSolution(B);
 }
 

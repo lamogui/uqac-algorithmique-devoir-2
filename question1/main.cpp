@@ -12,6 +12,7 @@ Julien De Loor (julien.de-loor1@uqac.ca)
 
 int main(int argc, char** argv)
 {
+  std::cout << "Algo TP2 Question 1 Julien De Loor: julien.de-loor1@uqac.ca" << std::endl;
   if (argc != 2)
   {
     std::cout << "usage: " << argv[0] << " <file.txt>" << std::endl;

@@ -11,7 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{894398BD-6542-42A5-8272-F9054015324C}</ProjectGuid>
+    <ProjectGuid>{6F3D4F2D-17AD-4BAA-8E40-14ECF1D7FF8A}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>question1</RootNamespace>
   </PropertyGroup>
@@ -79,6 +79,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\common\army.cpp" />
+    <ClCompile Include="..\common\mathutils.cpp" />
     <ClCompile Include="..\common\shooter.cpp" />
     <ClCompile Include="..\common\street.cpp" />
     <ClCompile Include="..\common\tower.cpp" />
@@ -86,12 +87,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\common\army.hpp" />
+    <ClInclude Include="..\common\mathutils.hpp" />
     <ClInclude Include="..\common\shooter.hpp" />
     <ClInclude Include="..\common\street.hpp" />
     <ClInclude Include="..\common\tower.hpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\question3\question3.vcxproj" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

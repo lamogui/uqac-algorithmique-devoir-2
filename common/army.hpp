@@ -26,7 +26,7 @@ public:
   void create(unsigned int count);
 
   void affectNaive(Street& street);
-  void affectDist(Street& street, unsigned int dist, unsigned int iterations = 1000);
+  void affectNaiveDist(Street& street, unsigned int dist, unsigned int iterations = 1000);
   void affectSolution(const Solution& solution);
 
 
