@@ -29,7 +29,10 @@ public:
   TowerMap towers;
   std::string name;
 
+  void getNeighbors(const Tower& t, Tower*& np, Tower*& nn) const;
 
+  void resetWeatherEst(); // Remove all positivEst;
+  void resetTowerUsability();
 
 
 };

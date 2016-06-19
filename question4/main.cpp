@@ -1,5 +1,5 @@
 /*
-Devoir 2 Question 3
+Devoir 2 Question 4
 Julien De Loor (julien.de-loor1@uqac.ca)
 */
 
@@ -8,23 +8,39 @@ Julien De Loor (julien.de-loor1@uqac.ca)
 #include <fstream>
 #include <iostream>
 #include <ctime>
+#include <csignal>
 
 #define WAITEND getchar()
 
+static bool stop = false;
+
+void sig_handler(int signo)
+{
+  if (signo == SIGINT)
+  {
+    std::cout << "Exiting..." << std::endl;
+    stop = true;
+  }
+}
+
 int main(int argc, char** argv)
 {
-  std::cout << "Algo TP2 Question 3 Julien De Loor: julien.de-loor1@uqac.ca" << std::endl;
+  signal(SIGINT, sig_handler);
+
+  std::cout << "Algo TP2 Question 4 Julien De Loor: julien.de-loor1@uqac.ca" << std::endl;
   srand((unsigned int)time(NULL));
 
   if (argc != 3)
   {
     std::cout << "usage: " << argv[0] << " <file.txt> <dist>" << std::endl;
+    WAITEND;
     return 0;
   }
   unsigned int dist;
   if (sscanf_s(argv[2], "%u", &dist) != 1)
   {
     std::cerr << "Fatal Error: invalid <dist>" << std::endl;
+    WAITEND;
     return -1;
   }
 
@@ -61,16 +77,28 @@ int main(int argc, char** argv)
   }
 
   std::cout << "Created a street of " << street.towers.size() << " towers" << std::endl;
-  
 
-  army.affectWeatherDist(street, dist);
+  while (!stop)
+  {
 
-  std::cout << "Affect our shooters to towers" << std::endl;
+    street.resetWeatherEst();
+    
+    army.affectWeatherDist(street, dist);
 
-  std::cout << "--------------------------------------" << std::endl;
-  std::cout << street << std::endl;
+    std::cout << "Affect our shooters to towers" << std::endl;
 
+    std::cout << "--------------------------------------" << std::endl;
+    std::cout << street << std::endl;
 
-  WAITEND;
+    std::cout << "Press any key to start next hour (CTRL+C to terminate)" << std::endl;
+
+    WAITEND;
+    
+    std::cout << "Evaluate towers" << std::endl;
+
+    street.resetTowerUsability();
+    army.moveFromBadTowers();
+
+  }
   return 0;
 }

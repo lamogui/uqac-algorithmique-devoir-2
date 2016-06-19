@@ -74,7 +74,14 @@ std::ostream& operator<<(std::ostream& os, const Street& s)
     Street::TowerMap::const_iterator it;
     for (it = s.towers.cbegin(); it != s.towers.cend();)
     {
-      os << "  O " << *(it->second) << std::endl;
+      if (it->second->doNotUse)
+      {
+        os << "  X " << *(it->second) << std::endl;
+      }
+      else
+      {
+        os << "  O " << *(it->second) << std::endl;
+      }
       int x = it->first;
       if ((++it) != s.towers.cend())
       {
@@ -97,4 +104,58 @@ Tower* Street::peekRandomTower() const
   TowerMap::const_iterator it = towers.cbegin();
   std::advance(it, rand() % towers.size());
   return it->second;
+}
+
+
+void Street::getNeighbors(const Tower& t, Tower*& np, Tower*& nn) const
+{
+  TowerMap::const_iterator it = towers.find(t.x);
+  if (it != towers.cend())
+  {
+    if (it != towers.cbegin())
+    {
+      TowerMap::const_iterator p = it;
+      std::advance(p, -1);
+      np = p->second;
+    }
+    else
+    {
+      np = nullptr;
+    }
+
+    TowerMap::const_iterator n = it;
+    std::advance(n, 1);
+    if (n != towers.cend())
+    {
+      nn = n->second;
+    }
+    else
+    {
+      nn = nullptr;
+    }
+  }
+  else
+  {
+    np = nullptr;
+    nn = nullptr;
+  }
+
+}
+
+
+void Street::resetWeatherEst()
+{
+  TowerMap::iterator it;
+  for (it = towers.begin(); it != towers.end(); ++it)
+  {
+    it->second->positivEst = false;
+  }
+}
+void Street::resetTowerUsability()
+{
+  TowerMap::iterator it;
+  for (it = towers.begin(); it != towers.end(); ++it)
+  {
+    it->second->doNotUse = false;
+  }
 }

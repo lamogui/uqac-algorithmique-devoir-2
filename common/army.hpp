@@ -26,8 +26,14 @@ public:
   void create(unsigned int count);
 
   void affectNaive(Street& street);
-  void affectNaiveDist(Street& street, unsigned int dist, unsigned int iterations = 1000);
+  void affectNaiveDist(Street& street, unsigned int dist);
+
+  void affectWeatherDist(Street& street, unsigned int dist);
+
+
   void affectSolution(const Solution& solution);
+
+  void moveFromBadTowers();   
 
 
   static Tower* RemoveRandomTower(Solution& s);
@@ -36,6 +42,8 @@ public:
   std::set<Shooter*> shooters;
   
   unsigned int ComputeSolutionValue(Solution& solution);
+  unsigned int ComputeSolutionRealValue(Solution& solution);
+  unsigned int ComputeSolutionWeatherValue(Solution& solution);
 
   static bool CanAddToSolutionDist(Solution& solution, const Tower& t, unsigned int dist);
 
